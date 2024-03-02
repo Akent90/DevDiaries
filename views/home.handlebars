@@ -1,0 +1,15 @@
+<h1>Welcome to Dev Diaries!</h1>
+<p>Find the latest posts from developers around the world.</p>
+
+{{#if posts}}
+    <ul>
+        {{#each posts as |post}}
+            <li>
+                <h2><a href="/posts/{{post.id}}">{{post.title}}</a></h2>
+                <p>{{post.summary}}</p>
+            </li>
+        {{/each}}
+    </ul>
+{{else}}
+    <p>No posts found!</p>
+{{/if}}
