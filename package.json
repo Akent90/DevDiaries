@@ -1,5 +1,5 @@
 {
-    "name": "DevDiaries",
+    "name": "devdiaries",
     "version": "1.0.0",
     "description": "A CMS-style blog site where developers can publish their blog posts and comment on other developer posts.",
     "main": "server.js",
