@@ -59,4 +59,17 @@ router.get('/logout', (req, res) => {
     }
 });
 
+// Route to render the create post page
+router.get('/create', (req, res) => {
+    if (!req.session.loggedIn) {
+        // Redirect to login page if not logged in
+        res.redirect('/login');
+        return;
+    }
+
+    res.render('create', {
+        layout: 'main'
+    });
+});
+
 module.exports = router;
