@@ -42,4 +42,21 @@ router.get('/signup', (req, res) => {
     });
 });
 
+// Logout route for ending the session with a GET request
+router.get('/logout', (req, res) => {
+    if (req.session.loggedIn) {
+        req.session.destroy(err => {
+            if (err) {
+                console.error('Logout error:', err);
+                res.status(500).send('Error occurred while logging out.');
+            } else {
+                res.redirect('/login');
+            }
+        });
+    } else {
+        // If the user is not logged in, redirect them to the login page
+        res.redirect('/login');
+    }
+});
+
 module.exports = router;
