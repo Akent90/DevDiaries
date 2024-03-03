@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { User } = require('../../models');
 const bcrypt = require('bcrypt');
 
-// Sign up route 
+// Sign up route for form submission
 router.post('/signup', async (req, res) => {
     try {
         const userData = await User.create(req.body);
@@ -19,7 +19,7 @@ router.post('/signup', async (req, res) => {
     }
 });
 
-// Login route 
+// Login route for form submission
 router.post('/login', async (req, res) => {
     try {
         const userData = await User.findOne({ where: { email: req.body.email } });
@@ -48,7 +48,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Logout route 
+// Logout route for ending the session
 router.post('/logout', (req, res) => {
     if (req.session.loggedIn) {
         req.session.destroy(() => {
