@@ -8,51 +8,48 @@ class User extends Model {
     }
 }
 
-User.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            allowNull: false, 
-            primaryKey: true, 
-            autoIncrement: true, 
-        },
-        username: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true,
-            validate: {
-                isEmail: true,
-            },
-        },
-        password: {
-            type: DataTypes.STRING,
-            allowNull: false, 
-            validate: {
-                len: [8],
-            },
+User.init({
+    id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+            isEmail: true,
         },
     },
-    {
-        hooks: {
-            async beforeCreate(userData) {
-                userData.password = await bcrypt.hash(userData.password, 10);
-                return userData;
-            },
-            async beforeUpdate(updateUserData) {
-                updateUserData.password = await bcrypt.hash(updatedUserData.password, 10);
-                return updatedUserData;
-            },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            len: [8],
         },
-        sequelize,
-        timestamps: true,
-        freezeTabName: true,
-        underscored: true,
-        modelName: 'user',
-    }
-);
+    },
+}, {
+    hooks: {
+        async beforeCreate(userData) {
+            userData.password = await bcrypt.hash(userData.password, 10);
+            return userData;
+        },
+        async beforeUpdate(updateUserData) {
+            updateUserData.password = await bcrypt.hash(updateUserData.password, 10);
+            return updateUserData;
+        },
+    },
+    sequelize,
+    timestamps: true,
+    freezeTableName: true,
+    underscored: true,
+    modelName: 'user',
+});
 
 module.exports = User;
