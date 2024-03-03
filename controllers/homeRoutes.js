@@ -1,5 +1,6 @@
 const router = require('express').Router();
-const { Post } = require('../models');
+const { Post, User } = require('../models');
+const withAuth = require('../utils/auth');
 
 // Route to render the homepage
 router.get('/', async (req, res) => {
@@ -8,8 +9,8 @@ router.get('/', async (req, res) => {
         const posts = postData.map((post) => post.get({ plain: true }));
 
         res.render('home', {
-            layout: 'main',
-            posts
+            posts,
+            loggedIn: req.session.loggedIn
         });
     } catch (err) {
         res.status(500).json(err);
@@ -18,58 +19,57 @@ router.get('/', async (req, res) => {
 
 // Route to render the login page
 router.get('/login', (req, res) => {
-    // Check if user is already logged in
     if (req.session.loggedIn) {
         res.redirect('/dashboard');
         return;
     }
-    // If not logged in, render the login page
-    res.render('login', {
-        layout: 'main'
-    });
+    res.render('login');
 });
 
 // Route to render the signup page
 router.get('/signup', (req, res) => {
-    // Check if user is already logged in
     if (req.session.loggedIn) {
         res.redirect('/dashboard');
         return;
     }
-    // If not logged in, render the signup page
-    res.render('signup', {
-        layout: 'main'
-    });
+    res.render('signup');
 });
 
 // Logout route for ending the session with a GET request
 router.get('/logout', (req, res) => {
     if (req.session.loggedIn) {
-        req.session.destroy(err => {
-            if (err) {
-                console.error('Logout error:', err);
-                res.status(500).send('Error occurred while logging out.');
-            } else {
-                res.redirect('/login');
-            }
+        req.session.destroy(() => {
+            res.redirect('/login');
         });
     } else {
-        // If the user is not logged in, redirect them to the login page
         res.redirect('/login');
     }
 });
 
 // Route to render the create post page
-router.get('/create', (req, res) => {
-    if (!req.session.loggedIn) {
-        // Redirect to login page if not logged in
-        res.redirect('/login');
-        return;
-    }
+router.get('/create', withAuth, (req, res) => {
+    res.render('create');
+});
 
-    res.render('create', {
-        layout: 'main'
-    });
+// Route to handle individual post view
+router.get('/posts/:id', async (req, res) => {
+    try {
+        const post = await Post.findByPk(req.params.id, {
+            include: [User]
+        });
+
+        if (!post) {
+            return res.status(404).render('404', { message: 'Post not found' });
+        }
+
+        res.render('post', {
+            post: post.get({ plain: true }),
+            loggedIn: req.session.loggedIn
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).render('error', { errorMessage: 'Error retreiving the post' });
+    }
 });
 
 module.exports = router;

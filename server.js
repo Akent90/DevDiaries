@@ -1,7 +1,7 @@
 // Importing necessary packages 
 const express = require('express');
 const session = require('express-session');
-const exphbs = require('express-handlebars');
+const expressHandlebars = require('express-handlebars');
 const path = require('path');
 
 const sequelize = require('./config/connection');
@@ -13,8 +13,10 @@ const routes = require('./controllers');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const hbs = exphbs.create({});
-app.engine('handlebars', hbs.engine);
+app.engine('handlebars', expressHandlebars({
+    defaultLayout: 'main',
+    extname: '.handlebars',
+}));
 app.set('view engine', 'handlebars');
 
 // Set up access to the sequelize store

@@ -19,7 +19,7 @@ router.post('/', withAuth, async (req, res) => {
             ...req.body,
             userId: req.session.userId,
         });
-        res.status(200).json(newPost);
+        res.redirect('/dashboard');
     } catch (err) {
         res.status(400).json(err);
     }
@@ -37,7 +37,7 @@ router.put('/:id', withAuth, async (req, res) => {
             res.status(404).json({ message: 'No post found with this id!' });
             return;
         }
-        res.status(200).json(postUpdate);
+        res.redirect('/dashboard');
     } catch (err) {
         res.status(500).json(err);
     }
@@ -55,7 +55,7 @@ router.delete('/:id', withAuth, async (req, res) => {
             res.status(404).json({ message: 'No post found with this id!' });
             return;
         }
-        res.status(200).json(postData);
+        res.redirect('/dashboard');
     } catch (err) {
         res.status(500).json(err);
     }
