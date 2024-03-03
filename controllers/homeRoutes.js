@@ -2,11 +2,32 @@ const router = require('express').Router();
 const { Post, User } = require('../models');
 const withAuth = require('../utils/auth');
 
+// // Route to render the homepage
+// router.get('/', async (req, res) => {
+//     try {
+//         const postData = await Post.findAll();
+//         const posts = postData.map((post) => post.get({ plain: true }));
+
+//         res.render('home', {
+//             posts,
+//             loggedIn: req.session.loggedIn
+//         });
+//     } catch (err) {
+//         res.status(500).json(err);
+//     }
+// });
+
 // Route to render the homepage
 router.get('/', async (req, res) => {
     try {
         const postData = await Post.findAll();
-        const posts = postData.map((post) => post.get({ plain: true }));
+        const posts = postData.map((post) => {
+            return {
+                id: post.id,
+                title: post.title,
+                createdAt: post.createdAt
+            };
+        });
 
         res.render('home', {
             posts,
@@ -55,12 +76,14 @@ router.get('/create', withAuth, (req, res) => {
 router.get('/posts/:id', async (req, res) => {
     try {
         const post = await Post.findByPk(req.params.id, {
-            include: [User]
+            include: [{ model: User, as: 'user' }]
         });
 
         if (!post) {
             return res.status(404).render('404', { message: 'Post not found' });
         }
+
+        console.log(post);
 
         res.render('post', {
             post: post.get({ plain: true }),

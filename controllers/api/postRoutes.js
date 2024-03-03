@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { Post } = require('../../models');
 const withAuth = require('../../utils/auth');
+const commentRoutes = require('./commentRoutes');
 
 // Get all posts 
 router.get('/', async (req, res) => {
@@ -60,5 +61,7 @@ router.delete('/:id', withAuth, async (req, res) => {
         res.status(500).json(err);
     }
 });
+
+router.use('/:postId/comments', commentRoutes);
 
 module.exports = router;

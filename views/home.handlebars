@@ -6,7 +6,7 @@
         {{#each posts as |post|}}
             <li>
                 <h2><a href="/posts/{{post.id}}">{{post.title}}</a></h2>
-                <p>{{post.summary}}</p>
+                <p>Date Created: {{post.createdAt}}</p>
             </li>
         {{/each}}
     </ul>

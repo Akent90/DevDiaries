@@ -1,2 +1,24 @@
 <h1>{{post.title}}</h1>
 <p>{{post.content}}</p>
+{{#if post.user}}
+    <p>Creator: {{post.user.username}}</p>
+{{/if}}
+<p>Date Created: {{post.createdAt}}</p>
+
+<form action="/posts/{{post.id}}/comments" method="POST">
+    <textarea name="commentText" rows="4" cols="50" placeholder="Leave a comment"></textarea>
+    <button type="submit">Submit</button>
+</form>
+
+{{#if post.comments.length}}
+    <h2>Comments</h2>
+    <ul>
+        {{#each post.comments as |comment|}}
+        <li>
+            <p>{{comment.content}}</p>
+            <p>Comment by: {{comment.user.username}}</p>
+            <p>Date Created: {{comment.createdAt}}</p>
+        </li>
+    {{/each}}
+    </ul>
+{{/if}}
