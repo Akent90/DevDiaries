@@ -5,7 +5,7 @@
 {{/if}}
 <p>Date Created: {{post.createdAt}}</p>
 
-<form action="/posts/{{post.id}}/comments" method="POST">
+<form action="/api/posts/{{post.id}}/comments" method="POST">
     <textarea name="commentText" rows="4" cols="50" placeholder="Leave a comment"></textarea>
     <button type="submit">Submit</button>
 </form>
@@ -15,8 +15,10 @@
     <ul>
         {{#each post.comments as |comment|}}
         <li>
-            <p>{{comment.content}}</p>
-            <p>Comment by: {{comment.user.username}}</p>
+            <p>{{comment.commentText}}</p>
+            {{#if comment.commentUser}}
+                <p>Comment by: {{comment.commentUser.username}}</p>
+            {{/if}}
             <p>Date Created: {{comment.createdAt}}</p>
         </li>
     {{/each}}
