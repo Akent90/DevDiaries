@@ -9,6 +9,7 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 // Automatically import index.js from controllers 
 const routes = require('./controllers');
+const commentFormRoutes = require('./controllers/commentFormRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
