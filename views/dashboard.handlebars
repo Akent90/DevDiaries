@@ -1,7 +1,7 @@
 <h1>Dashboard</h1>
 
 {{#if userPosts}}
-    <ul>
+    <div class="post-container">
         {{#each userPosts as |post|}}
             <li>
                 <h2><a href="/posts/{{post.id}}">{{post.title}}</a></h2>
@@ -13,9 +13,10 @@
                 </form>
             </li>
         {{/each}}
-    </ul>
+    </div>
     <a href="/create">Create New Post</a>
 {{else}}
     <p>You have not created any posts yet.</p>
     <a href="/create">Create A New Post</a>
 {{/if}}
+</main>

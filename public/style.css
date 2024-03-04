@@ -42,3 +42,27 @@ footer {
     background: #333;
     color: #fff;
 }
+
+.post-container {
+    background-color: #fff;
+    border: 1px solid #680bb0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.post-title {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.post-content {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.post-meta {
+    color: #666;
+    font-size: 14px;
+}

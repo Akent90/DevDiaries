@@ -26,30 +26,13 @@ router.post('/', withAuth, async (req, res) => {
     }
 });
 
-// Update a post by its id value 
-router.put('/:id', withAuth, async (req, res) => {
-    try {
-        const postUpdate = await Post.update(req.body, {
-            where: {
-                id: req.params.id,
-            },
-        });
-        if (!postUpdate) {
-            res.status(404).json({ message: 'No post found with this id!' });
-            return;
-        }
-        res.redirect('/dashboard');
-    } catch (err) {
-        res.status(500).json(err);
-    }
-});
-
 // Delete a post 
-router.delete('/:id', withAuth, async (req, res) => {
+router.post('/delete/:id', withAuth, async (req, res) => {
     try {
         const postData = await Post.destroy({
             where: {
                 id: req.params.id,
+                userId: req.session.userId,
             },
         });
         if (!postData) {

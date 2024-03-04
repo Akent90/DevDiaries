@@ -44,6 +44,27 @@ router.get('/edit/:id', withAuth, async (req, res) => {
     }
 });
 
+// // Update a post by its id value (POST request to match form action)
+router.post('/update/:id', withAuth, async (req, res) => {
+    try {
+        const { title, content } = req.body;
+        const postId = req.params.id;
+        const updatedPost = await Post.update(
+            { title, content },
+            { where: { id: postId, userId: req.session.userId } }
+        );
+
+        if (updatedPost[0] > 0) {
+            res.redirect('/dashboard');
+        } else {
+            res.status(404).send('Post not found or you do not have permission to edit.');
+        }
+    } catch (error) {
+        console.error('error updating post:', error);
+        res.status(500).send('Server error');
+    }
+});
+
 router.post('/delete/:id', withAuth, async (req, res) => {
     try {
         const postId = req.params.id;

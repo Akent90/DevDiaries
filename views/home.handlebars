@@ -2,14 +2,14 @@
 <p>Find the latest posts from developers around the world.</p>
 
 {{#if posts}}
-    <ul>
+    <div class="post-container">
         {{#each posts as |post|}}
-            <li>
+            <div class="post">
                 <h2><a href="/posts/{{post.id}}">{{post.title}}</a></h2>
                 <p>Date Created: {{post.createdAt}}</p>
-            </li>
+            </div>
         {{/each}}
-    </ul>
+    </div>
 {{else}}
     <p>No posts found!</p>
 {{/if}}
