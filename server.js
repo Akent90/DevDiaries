@@ -3,13 +3,14 @@ const express = require('express');
 const session = require('express-session');
 const expressHandlebars = require('express-handlebars');
 const path = require('path');
+const methodOverride = require('method-override');
 
 const sequelize = require('./config/connection');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 // Automatically import index.js from controllers 
 const routes = require('./controllers');
-const commentFormRoutes = require('./controllers/commentFormRoutes');
+// const commentFormRoutes = require('./controllers/commentFormRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -40,6 +41,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Use routes 
 app.use(routes);
+
+app.use(methodOverride('_method'));
 
 // Start the server and sync sequelize
 sequelize.sync({ force: false }).then(() => {

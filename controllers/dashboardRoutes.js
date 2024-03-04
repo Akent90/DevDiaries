@@ -13,16 +13,49 @@ router.get('/', withAuth, async (req, res) => {
         });
 
         // Serialize the data so the template can read it
-        const posts = postData.map((post) => post.get({ plain: true }));
+        const userPosts = postData.map((post) => post.get({ plain: true }));
 
         // Pass serialized data and session flag into template
         res.render('dashboard', {
             layout: 'main',
-            posts,
+            userPosts,
             loggedIn: req.session.loggedIn
         });
     } catch (err) {
         res.redirect('login');
+    }
+});
+
+router.get('/edit/:id', withAuth, async (req, res) => {
+    try {
+        const post = await Post.findByPk(req.params.id);
+        if (!post) {
+            res.status(404).send('Post not found');
+            return;
+        }
+        if (post.userId !== req.session.userId) {
+            res.status(403).send('Unauthorized to edit this post');
+            return;
+        }
+        res.render('editPost', { post: post.get({ plain: true }), loggedIn: req.session.loggedIn });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+    }
+});
+
+router.post('/delete/:id', withAuth, async (req, res) => {
+    try {
+        const postId = req.params.id;
+        const deletedRowCount = await Post.destroy({ where: { id: postId, userId: req.session.userId } });
+        if (deletedRowCount === 0) {
+            res.status(404).json({ message: 'No post found with this ID' });
+            return;
+        }
+        res.redirect('/dashboard');
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
